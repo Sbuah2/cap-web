@@ -1,19 +1,39 @@
-console.log("✅ JavaScript aktif dan siap jalan!");
+const SUPABASE_URL = 'https://bspnujyvwliymghabrcq.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
+const { createClient } = supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-document.addEventListener("DOMContentLoaded", () => {
-  const heading = document.querySelector("header h1");
-  const subheading = document.querySelector("header p");
+document.getElementById('message-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-  if (heading) {
-    heading.addEventListener("click", () => {
-      heading.style.color = "#5ac8fa";
-      subheading.innerText = "✨ Kamu baru aja klik judul!";
-    });
-  }
+  const name = document.getElementById('name').value.trim();
+  const message = document.getElementById('message').value.trim();
 
-  const footer = document.querySelector("footer");
-  if (footer) {
-    const tahun = new Date().getFullYear();
-    footer.innerHTML += `<br><small>&copy; ${tahun} - Versi awal web by kamu 😎</small>`;
+  if (!name || !message) return;
+
+  const { error } = await supabaseClient
+    .from('messages')
+    .insert([{ name, message }]);
+
+  if (error) {
+    alert('Gagal mengirim pesan.');
+  } else {
+    alert('Pesan berhasil dikirim!');
+    document.getElementById('message-form').reset();
+    loadMessages();
   }
 });
+
+async function loadMessages() {
+  const { data } = await supabaseClient
+    .from('messages')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  const messageList = document.getElementById('message-list');
+  messageList.innerHTML = data.map(msg => `
+    <p><strong>${msg.name}:</strong> ${msg.message}</p>
+  `).join('');
+}
+
+loadMessages();

@@ -16,10 +16,20 @@
     <h2>Proyek Eksperimen AI Mandiri</h2>
     <p>Ini adalah web awal buatan untuk mengembangkan sistem AI yang fleksibel, manusiawi, dan reflektif.</p>
   </main>
-
+   <section id="form-section">
+  <h2>Kirim Pesan</h2>
+  <form id="message-form">
+    <input type="text" id="name" placeholder="Nama kamu" required />
+    <textarea id="message" placeholder="Pesan kamu" required></textarea>
+    <button type="submit">Kirim</button>
+  </form>
+  <div id="message-list"></div>
+</section>
   <footer>
     <p>&copy; 2025 Sbuah2 – C.A.P Project. All rights reserved.</p>
   </footer>
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 <script src="script.js"></script>
 </body>
 </html>
